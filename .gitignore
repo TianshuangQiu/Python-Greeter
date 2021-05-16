@@ -1,2 +1,4 @@
 
 .DS_Store
+model.h5
+yolov3.weights
