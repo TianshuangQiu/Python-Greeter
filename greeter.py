@@ -4,6 +4,8 @@ import os
 import pygame
 import PIL
 import numpy as np
+
+from picamera import PiCamera
 from gtts import gTTS
 from numpy import expand_dims
 from keras.models import load_model
@@ -35,7 +37,6 @@ def play_file(path):
 
     path: path to the file
     """
-    pygame.mixer.init()
     pygame.mixer.music.load(path)
     pygame.mixer.music.play(0)
     while pygame.mixer.music.get_busy():
@@ -225,11 +226,9 @@ class BoundBox:
 
 
 # capture and save an image
-vid = cv2.VideoCapture(0)
-ret, frame = vid.read()
+camera = PiCamera()
 img_name = "captured.png"
-cv2.imwrite(img_name, frame)
-vid.release()
+camera.capture(img_name)
 
 # load yolov3 model
 model = load_model('model.h5')
@@ -283,5 +282,6 @@ for i in range(len(v_boxes)):
     else:
         create_file(v_labels[i])
 
+print(v_labels)
 for l in v_labels:
     play_file(f"Saved/Hello_{l}.mp3")
